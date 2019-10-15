@@ -1,17 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_instagram/activity/activityScreen.dart';
 import 'package:flutter_instagram/direct/directScreen.dart';
-import 'package:flutter_instagram/post/postScreen.dart';
-import 'package:flutter_instagram/profile/profileScreen.dart';
-import 'package:flutter_instagram/search/searchScreen.dart';
-import 'package:flutter_instagram/shared/animations/slideLeftRoute.dart';
-import 'package:flutter_instagram/shared/animations/slideRightRoute.dart';
-import 'package:flutter_instagram/shared/components/bottomNavigator.dart';
 import 'package:flutter_instagram/shared/screen.dart';
 
 class HomeScreen extends StatefulWidget {
+
+  Function onDirectClick;
+  Function onStorieClick;
+
+  HomeScreen({this.onDirectClick, this.onStorieClick});
 
   @override
   State<StatefulWidget> createState() {
@@ -22,30 +20,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreen extends State<HomeScreen>{
  
-  final controller = PageController(
-    initialPage: 0
-  );
-
-  int _currentMenuIndex = 0;
-  final List<Widget> _menuScreens = [
-    HomeScreen(),
-    SearchScreen(),
-    PostScreen(),
-    ActivityScreen(),
-    ProfileScreen()
-  ];
+  
 
   @override
   Widget build(BuildContext context) {
-    return PageView(
-      controller: controller,
-      scrollDirection: Axis.horizontal,
-
-      children: <Widget>[
-        home(),
-        DirectScreen()
-      ],
-    );
+    return home();
+       
   }
  
   Widget home(){
@@ -61,6 +41,7 @@ class _HomeScreen extends State<HomeScreen>{
                 color: Theme.of(context).iconTheme.color,
                 size: height(percent: "4%",context: context),
               ),
+              onPressed: this.widget.onStorieClick,
             ),
             Text(
               "Instagram", 
@@ -85,21 +66,11 @@ class _HomeScreen extends State<HomeScreen>{
               color: Theme.of(context).iconTheme.color,
               size: height(percent: "3.5%", context: context)
             ),
-            onPressed: () => {}            
+            onPressed: this.widget.onDirectClick            
           ),
         ],
       ),
-      body: _menuScreens[_currentMenuIndex],
-      bottomNavigationBar: BottomNavigatorWidget(
-          currentMenuIndex: _currentMenuIndex,
-          onTabTapped: onTabTapped,
-        )
+      
     );
-  }
-
-  onTabTapped(int index){
-    setState(() {
-      _currentMenuIndex = index; 
-    });
   }
 }
