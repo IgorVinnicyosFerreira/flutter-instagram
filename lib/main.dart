@@ -13,11 +13,19 @@ import 'package:flutter_instagram/shared/screen.dart';
 import 'package:flutter_instagram/storie/storieScreen.dart';
 
 
-void main()  => runApp(Instagram());
+void main() async{
+  final cameras = await availableCameras();
+
+  final firstCamera = cameras.first;
+
+  runApp(Instagram(camera: firstCamera,));
+}
 
 class Instagram extends StatefulWidget {
   
   CameraDescription camera;
+
+  Instagram({this.camera});
 
   @override
   State<StatefulWidget> createState() {
@@ -55,6 +63,7 @@ class _InstagramState extends State<Instagram>{
     bool isHomePage = instanceOfHome(_menuScreens[_currentMenuIndex]);
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
   
@@ -76,7 +85,7 @@ class _InstagramState extends State<Instagram>{
         physics: !isHomePage ? NeverScrollableScrollPhysics() : null,
         scrollDirection: Axis.horizontal,
         children: <Widget>[
-          storieScreen,
+          StorieScreen(camera: this.widget.camera, goBack: nextPageView,),
           Scaffold(
             body: _menuScreens[_currentMenuIndex],
             bottomNavigationBar:  BottomNavigatorWidget(
