@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_instagram/shared/colors.dart';
 import 'package:flutter_instagram/shared/screen.dart';
 import 'package:flutter_instagram/storie/components/captureWidget.dart';
@@ -46,24 +47,24 @@ class _StorieScreen extends State<StorieScreen>{
 
   @override
   Widget build(BuildContext context) {
-  
+   
     return Scaffold(
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot){
           if(snapshot.connectionState == ConnectionState.done){
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                children: <Widget>[ 
-                  CameraPreview(_controller),
-                    HeaderWidget(goBack: this.widget.goBack,),
-                    Align(
+            return Stack(
+              children: <Widget>[ 
+                CameraPreview(_controller),
+                HeaderWidget(goBack: this.widget.goBack,),
+                Container(
+                  margin: EdgeInsets.only(bottom: height(context: context, percent: "8%")),
+                  child: Align(
                       alignment: Alignment.bottomCenter,
                       child: CaptureWidget(key: _captureKey,),
                     ),
-                ],
-              ),
+                )
+              ],
             );
           } else {
             return Center(child: CircularProgressIndicator(),);
